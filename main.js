@@ -1,7 +1,4 @@
 // app.js - type=module
-const user = auth.currentUser; if(!user) return alert('Login first');
-const text = document.getElementById('postText').value.trim();
-const file = document.getElementById('postImage').files[0];
 let imgURL = '';
 if(file){
 const path = `posts/${user.uid}/${Date.now()}_${file.name}`;
