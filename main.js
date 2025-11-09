@@ -1,45 +1,45 @@
-:root{
---jt-primary:#f67938;
---bs-body-bg:#ffffff;
---bs-body-color:#686868;
---jt-heading-color:#000000;
---jt-link-color:#f67938;
---jt-border-light:#efefef;
+// Small utilities extracted from the original theme
+(function(){
+function rmurl(e,t){
+var r=new RegExp(/\?m=0|&m=0|\?m=1|&m=1/g);
+if(r.test(e)){ e=e.replace(r,""); if(t) window.history.replaceState({},document.title,e); }
+return e;
+}
+var currentUrl = rmurl(location.toString(), true);
+
+
+// Dark theme toggle (reads from localStorage, simple)
+if (typeof localStorage !== 'undefined' && localStorage.getItem('theme') === 'dark'){
+document.documentElement.classList.add('dark-mode');
+}
+})();
+
+
+// ====== Keyboard shortcut blocker (webpage-level) ======
+// This will prevent common modifier shortcuts (Ctrl/Alt/Meta) and some function keys from working.
+// NOTE: It only runs while this page is open — it cannot disable OS-wide shortcuts.
+
+
+document.addEventListener('keydown', function(e) {
+// Block modifier combos (Ctrl/Alt/Meta) to disable copy/paste, refresh, devtools combos etc.
+if (e.ctrlKey || e.altKey || e.metaKey) {
+e.preventDefault();
+e.stopPropagation();
+console.log('Shortcut blocked:', e.key, 'ctrl:', e.ctrlKey, 'alt:', e.altKey, 'meta:', e.metaKey);
+return false;
 }
 
 
-/* Basic reset & body */
-*{box-sizing:border-box}
-body{font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; color:var(--bs-body-color); background:var(--bs-body-bg); line-height:1.5}
-
-
-a{color:var(--jt-link-color); text-decoration:none}
-
-
-/* Header */
-#header{background:var(--bs-body-bg); border-bottom:1px solid var(--jt-border-light); padding:0.5rem 0}
-.logo-wrap img{max-width:200px; height:auto}
-#navbar .navbar-nav{display:flex; gap:1rem; list-style:none; padding-left:0; margin:0}
-#navbar .nav-link{padding:0.5rem 0; color:var(--bs-body-color)}
-
-
-/* Main layout */
-#primary{max-width:1140px; margin:0 auto}
-
-
-/* Sidebar */
-#sidebar .widget{background:transparent; padding:0.5rem}
-
-
-/* Footer */
-#footer{border-top:1px solid var(--jt-border-light); background:transparent}
-
-
-/* Small responsive tweaks */
-@media (max-width:991.98px){
-#navbar .navbar-nav{flex-direction:column}
+// Block certain function keys
+var blocked = ['F12', 'F5', 'F11'];
+if (blocked.indexOf(e.key) !== -1) {
+e.preventDefault();
+e.stopPropagation();
+console.log('Blocked key:', e.key);
+return false;
 }
+});
 
 
-/* A few utility classes from theme */
-.jt-btn-primary{background:var(--jt-primary); color:#fff; padding:.5rem 1rem; border-radius:6px}
+// Optional: disable right-click context menu (if desired)
+// document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
