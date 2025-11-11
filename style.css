@@ -35,7 +35,7 @@ border-radius: 5px;
 padding: 20px;
 box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 0px 0px, inset rgba(60, 64, 67, 0.15) 0px -1px 0px 0px !important;
 }
-.fullbox { background: var(--bs-body-bg);display: flex;flex-direction: row;justify-content: space-around;align-items: center;padding: 2px;position: fixed;bottom: 5px;Left: 2px;Right: 2px;transition: box-shadow 0.6s cubic-bezier(.79,.21,.06,.81);border-radius: 10px;z-index: 9999999999996;width: 97%;margin: 0 auto;box-shadow: rgb(9 30 66 / .25) 0 1px 1px, rgb(9 30 66 / .13) 0 0 1px 1px;}
+.fullbox { background: var(--bs-body-bg);display: flex;flex-direction: row;justify-content: space-around;align-items: center;padding: 2px;position: fixed;bottom: 5px;Left: 2px;Right: 2px;transition: box-shadow 0.6s cubic-bezier(.79,.21,.06,.81);border-radius: 10px;z-index: 999999999999;width: 97%;margin: 0 auto;box-shadow: rgb(9 30 66 / .25) 0 1px 1px, rgb(9 30 66 / .13) 0 0 1px 1px;}
 }
 .dark-mode {
     --jt-heading-hover: yellow;
