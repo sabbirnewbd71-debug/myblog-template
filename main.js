@@ -1,1 +1,1 @@
-window.systemActive = true;  // 🔴 বন্ধ করতে চাইলে false করে দাও
+window.systemActive = true;
