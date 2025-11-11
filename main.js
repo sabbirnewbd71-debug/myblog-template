@@ -6,3 +6,4 @@ window.systemActive = false;            // 🔴 বন্ধ করতে চা
 
 <!-- ✅ মূল সিস্টেম GitHub থেকে লোড হবে -->
 <script src="https://yourgithubusername.github.io/project/domain-check.js"></script>
+
