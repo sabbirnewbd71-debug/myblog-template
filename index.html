@@ -1,64 +1,84 @@
-<!doctype html>
-<html lang="bn">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MyBook — Demo Social App</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Firebase Comments</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { font-family: sans-serif; background:#f9f9f9; padding:10px; }
+.comment { background:#fff; padding:10px; border-radius:8px; margin-bottom:10px; }
+.comment small { color:#777; font-size:12px; }
+textarea { width:100%; padding:8px; border-radius:6px; border:1px solid #ccc; }
+button { margin-top:5px; padding:6px 12px; border:none; border-radius:6px; background:#2196f3; color:#fff; cursor:pointer; }
+</style>
 </head>
 <body>
-<header class="topbar">
-<div class="logo">MyBook</div>
-<div class="search"><input placeholder="Search"></div>
-<div class="actions">
-<button id="btnProfile" class="btn small">Profile</button>
-<button id="btnLogout" class="btn small">Logout</button>
-</div>
-</header>
 
+<h3>Comments</h3>
+<div id="comment-list">Loading...</div>
 
-<main class="container">
-<aside class="left">
-<div class="card">Left Menu</div>
-</aside>
+<textarea id="comment-input" placeholder="Write your comment..."></textarea>
+<br>
+<input type="text" id="comment-name" placeholder="Your name">
+<br>
+<button id="post-btn">Post Comment</button>
 
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore-compat.js"></script>
 
-<section class="feed">
-<!-- Auth forms -->
-<div id="authArea" class="card auth">
-<h3>Welcome</h3>
-<div class="tabs">
-<button id="showLogin" class="active">Login</button>
-<button id="showSignup">Signup</button>
-</div>
-<form id="loginForm" class="form">
-<input id="loginEmail" placeholder="Email" type="email">
-<input id="loginPass" placeholder="Password" type="password">
-<button type="submit" class="btn">Login</button>
-</form>
-<form id="signupForm" class="form hide">
-<input id="signupName" placeholder="Full name">
-<input id="signupEmail" placeholder="Email" type="email">
-<input id="signupPass" placeholder="Password" type="password">
-<button type="submit" class="btn">Create account</button>
-</form>
-</div>
+<script>
+// ✅ Your Firebase config here
+const firebaseConfig = {
+  apiKey: "AIzaSyBfike0wB3C8CZWPY8yRhlMS9w-ZPWzb3o",
+ authDomain: "hosting-project-2a2ea.firebaseapp.com",
+   projectId: "hosting-project-2a2ea",
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
+// Get postId from URL parameter
+const urlParams = new URLSearchParams(window.location.search);
+const postId = urlParams.get('postId') || 'default';
 
-<!-- Composer -->
-<div id="composer" class="card hide">
-<textarea id="postText" placeholder="What's on your mind?"></textarea>
-<input id="postImage" type="file" accept="image/*">
-<div class="row">
-<button id="btnPost" class="btn">Post</button>
-</div>
-</div>
+// Refs
+const list = document.getElementById('comment-list');
+const nameInput = document.getElementById('comment-name');
+const commentInput = document.getElementById('comment-input');
+const postBtn = document.getElementById('post-btn');
 
+// Listen to comments (live)
+db.collection("comments")
+  .where("postId", "==", postId)
+  .orderBy("createdAt", "asc")
+  .onSnapshot(snapshot => {
+    list.innerHTML = "";
+    if (snapshot.empty) {
+      list.innerHTML = "<p>No comments yet</p>";
+    } else {
+      snapshot.forEach(doc => {
+        const c = doc.data();
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `<b>${c.name}</b><br>${c.text}<br><small>${c.createdAt?.toDate().toLocaleString() || ""}</small>`;
+        list.appendChild(div);
+      });
+    }
+  });
 
-<!-- Feed list -->
-<div id="feedList"></div>
-</section>
+// Post comment
+postBtn.onclick = async () => {
+  const name = nameInput.value.trim() || "Anonymous";
+  const text = commentInput.value.trim();
+  if (!text) return alert("Write something first!");
+  await db.collection("comments").add({
+    postId,
+    name,
+    text,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  commentInput.value = "";
+};
+</script>
 
-
-<aside class="right">
+</body>
 </html>
