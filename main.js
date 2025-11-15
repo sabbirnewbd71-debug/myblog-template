@@ -3,7 +3,7 @@
   /* -----------------------------------
         DOMAIN CHECK + BACK BLOCK (ES5)
   -----------------------------------*/
-  var allowedDomains = ["sabbir.com", "www.sabbir.com"];
+  var allowedDomains = ["utblackles4.com", "www.utblackles4.com"];
   var currentDomain = window.location.hostname;
 
   if (allowedDomains.indexOf(currentDomain) === -1) {
