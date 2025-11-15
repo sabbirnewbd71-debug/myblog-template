@@ -1,4 +1,3 @@
-
 (function () {
   // Don't delete the credit.
   var licenseUrl = "https://anwarultech.blogspot.com/";
