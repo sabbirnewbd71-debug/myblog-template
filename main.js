@@ -233,3 +233,83 @@
   window.removeBookmark = removeBookmark;
 
 })();
+
+var অভিবাদন_এলিমেন্ট = document.querySelector("#greetings");
+var বর্তমানঘন্টা = new Date().getHours();
+
+var শুভেচ্ছা_বার্তা = [
+  "মিষ্টি স্বপ্ন দেখো!",
+  "শুভ সকাল!",
+  "শুভ বিকাল!",
+  "শুভ সন্ধ্যা!",
+  "শুভ রাত্রি!",
+  "ঘুমানোর সময় হয়েছে!"
+];
+
+var দেখানোর_বার্তা = "";
+
+if (বর্তমানঘন্টা < 4) {
+  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[0];
+} else if (বর্তমানঘন্টা < 12) {
+  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[1];
+} else if (বর্তমানঘন্টা < 17) {
+  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[2];
+} else if (বর্তমানঘন্টা < 19) {
+  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[3];
+} else if (বর্তমানঘন্টা < 22) {
+  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[4];
+} else {
+  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[5];
+}
+
+অভিবাদন_এলিমেন্ট.setAttribute("data-text", দেখানোর_বার্তা);
+
+
+// ইংরেজি → বাংলা সংখ্যা রূপান্তর ফাংশন
+function bnNumber(en) {
+  var nums = {
+    "0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪",
+    "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"
+  };
+
+  return en.toString().replace(/[0-9]/g, function (d) {
+    return nums[d];
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  function ঘড়ি_আপডেট() {
+    var এখন = new Date();
+
+    var ঘন্টা = String(এখন.getHours());
+    if (ঘন্টা.length < 2) ঘন্টা = "0" + ঘন্টা;
+
+    var মিনিট = String(এখন.getMinutes());
+    if (মিনিট.length < 2) মিনিট = "0" + মিনিট;
+
+    var সেকেন্ড = String(এখন.getSeconds());
+    if (সেকেন্ড.length < 2) সেকেন্ড = "0" + সেকেন্ড;
+
+    var সময়_স্ট্রিং = bnNumber(ঘন্টা) + ":" + bnNumber(মিনিট) + ":" + bnNumber(সেকেন্ড);
+
+    var ঘড়ি = document.getElementById("clock");
+    var সময়_ঘোষক = document.getElementById("clock-announcer");
+
+    if (ঘড়ি && সময়_ঘোষক) {
+      ঘড়ি.textContent = সময়_স্ট্রিং;
+      ঘড়ি.setAttribute("datetime", এখন.toISOString());
+      সময়_ঘোষক.textContent =
+        "বর্তমান সময় " +
+        bnNumber(ঘন্টা) +
+        "টা " +
+        bnNumber(মিনিট) +
+        "মিনিট " +
+        bnNumber(সেকেন্ড) +
+        "সেকেন্ড";
+    }
+  }
+
+  ঘড়ি_আপডেট();
+  setInterval(ঘড়ি_আপডেট, 1000);
+});
