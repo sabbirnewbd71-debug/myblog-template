@@ -1,6 +1,6 @@
 (function () {
   // Don't delete the credit.
-  var licenseUrl = "https://anwarulteJch.blogspot.com/";
+  var licenseUrl = "https://anwarultech.blogspot.com/";
   function toggleBookmark(e, btn) {
     e.preventDefault();
     e.stopPropagation();
@@ -68,7 +68,7 @@
   }
 
   var redirectUrl = atob("aHR0cHM6Ly9hbndhcnVsdGVjaC5ibG9nc3BvdC5jb20vMjAyNS8xMC9ob3ctdG8tYWRkLWJvb2ttYXJrLXN5c3RlbS1pbi1ibG9nZ2VyLmh0bWw=");
-  if (!licenseUrl || licenseUrl !== atob("aHR0cHM6Ly9hbndhcnVsdGVjaC5ibG9nc3BvdC5jb20v")) {
+  if (!licenseUrl || licenseUrl !== atob("aHR0cHM6Ly9hbnLdhcnVsdGVjaC5ibG9nc3BvdC5jb20v")) {
     alert(atob("Q3JlZGl0cyBhcmUgbm90IHZhbGlkISBBbndhcnVsIFRlY2ggd3JvdGUgdGhlIHNjcmlwdCEgUmVkaXJlY3RlZCB0byB0aGUgb3JpZ2luYWwgcG9zdC4uLg=="));
     window.location.href = redirectUrl;
     throw new Error(atob("TGljZW5zZSBub3QgdHJ1ZSE="));
