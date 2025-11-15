@@ -1,49 +1,6 @@
 (function () {
 
   /* -----------------------------------
-        DOMAIN CHECK + BACK BLOCK (ES5)
-  -----------------------------------*/
-  var allowedDomains = ["utblackles4.com", "utblackles4.blogspot.com"];
-  var currentDomain = window.location.hostname;
-
-  if (allowedDomains.indexOf(currentDomain) === -1) {
-
-    /* BACK BUTTON BLOCK */
-    history.pushState(null, null, location.href);
-    window.onpopstate = function () {
-      history.pushState(null, null, location.href);
-    };
-
-    /* REDIRECT */
-    window.location.replace("utblackles4.com");
-  }
-
-  /* -----------------------------------
-        SECURITY PROTECT (COPY, DRAG, SHORTCUT)
-  -----------------------------------*/
-  document.addEventListener("contextmenu", function (e) { e.preventDefault(); });
-  document.addEventListener("copy", function (e) { e.preventDefault(); });
-  document.addEventListener("paste", function (e) { e.preventDefault(); });
-  document.addEventListener("selectstart", function (e) { e.preventDefault(); });
-  document.addEventListener("dragstart", function (e) { e.preventDefault(); });
-  document.addEventListener("drop", function (e) { e.preventDefault(); });
-
-  document.onkeydown = function (e) {
-    if (
-      e.keyCode === 123 ||                 // F12
-      (e.ctrlKey && e.keyCode === 85) ||   // Ctrl+U
-      (e.ctrlKey && e.keyCode === 83) ||   // Ctrl+S
-      (e.ctrlKey && e.keyCode === 67) ||   // Ctrl+C
-      (e.ctrlKey && e.keyCode === 86) ||   // Ctrl+V
-      (e.ctrlKey && e.keyCode === 73) ||   // Ctrl+I
-      (e.ctrlKey && e.shiftKey && e.keyCode === 73) // Ctrl+Shift+I
-    ) {
-      e.preventDefault();
-      return false;
-    }
-  };
-
-  /* -----------------------------------
         GREETINGS SYSTEM (ES5)
   -----------------------------------*/
   var greetElem = document.querySelector("#greetings");
@@ -76,14 +33,14 @@
   -----------------------------------*/
   function bnNumber(en) {
     var nums = {
-      "0": "০", "1": "১", "2": "২", "৩": "৩", "4": "৪",
+      "0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪",
       "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"
     };
     return en.toString().replace(/[0-9]/g, function (d) { return nums[d]; });
   }
 
   /* -----------------------------------
-        CLOCK SYSTEM
+              CLOCK SYSTEM
   -----------------------------------*/
   function updateClock() {
     var now = new Date();
@@ -107,7 +64,9 @@
     }
   }
 
+  /* Tick clock */
   setInterval(updateClock, 1000);
+
 
   /* -----------------------------------
         BOOKMARK SYSTEM (ES5)
@@ -189,7 +148,6 @@
   function showBookmarks() {
     var list = document.getElementById("bookmarkList");
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
-
     if (!list) return;
 
     if (!bookmarks.length) {
@@ -305,6 +263,7 @@
       }
     }
 
+    /* Reading progress bar */
     var container = document.getElementById("reading-progress-container");
     var bar = document.getElementById("reading-progress-bar");
     var percent = document.getElementById("reading-progress-percentage");
@@ -324,6 +283,7 @@
     }
   });
 
+  /* Close dropdown */
   document.addEventListener("click", function (e) {
     var dropdown = document.getElementById("bookmarkList");
     var btn = document.querySelector(".bookmark-menu-btn");
@@ -336,6 +296,7 @@
     }
   });
 
+  /* Global Exports */
   window.toggleBookmark = toggleBookmark;
   window.toggleBookmarkList = toggleBookmarkList;
   window.showBookmarks = showBookmarks;
