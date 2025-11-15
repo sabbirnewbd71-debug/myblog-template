@@ -12,6 +12,7 @@
 
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
     var found = null;
+
     for (var i = 0; i < bookmarks.length; i++) {
       if (bookmarks[i].url === post.url) {
         found = bookmarks[i];
@@ -54,6 +55,7 @@
     if (!c) return;
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
     var count = bookmarks.length;
+
     if (count > 0) {
       c.style.display = "inline-block";
       c.textContent = count;
@@ -74,11 +76,11 @@
   function showBookmarks() {
     var list = document.getElementById("bookmarkList");
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
+
     if (!list) return;
 
     if (!bookmarks.length) {
-      list.innerHTML =
-        '<p style="text-align:center;color:#777;">No bookmarks yet</p>';
+      list.innerHTML = '<p style="text-align:center;color:#777;">No bookmarks yet</p>';
       return;
     }
 
@@ -87,18 +89,12 @@
       var b = bookmarks[i];
       html += '<div class="bookmark-item">';
       html += '<img src="' + b.thumb + '" alt="">';
-      html +=
-        '<a href="' + b.url + '" target="_blank" onclick="event.stopPropagation();">' +
-        b.title +
-        "</a>";
-      html +=
-        "<button onclick=\"removeBookmark(event,'" + b.url + "')\">🗑️</button>";
+      html += '<a href="' + b.url + '" target="_blank" onclick="event.stopPropagation();">' + b.title + "</a>";
+      html += "<button onclick=\"removeBookmark(event,'" + b.url + "')\">🗑️</button>";
       html += "</div>";
     }
-    html +=
-      '<a class="show-all" href="/p/bookmark.html">Show all (' +
-      bookmarks.length +
-      ")</a>";
+
+    html += '<a class="show-all" href="/p/bookmark.html">Show all (' + bookmarks.length + ")</a>";
     list.innerHTML = html;
   }
 
@@ -106,9 +102,13 @@
     e.stopPropagation();
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
     var newBookmarks = [];
+
     for (var i = 0; i < bookmarks.length; i++) {
-      if (bookmarks[i].url !== url) newBookmarks.push(bookmarks[i]);
+      if (bookmarks[i].url !== url) {
+        newBookmarks.push(bookmarks[i]);
+      }
     }
+
     localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
     showBookmarks();
     updateBookmarkCount();
@@ -124,6 +124,7 @@
     for (var i = 0; i < buttons.length; i++) {
       var btn = buttons[i];
       var url = btn.getAttribute("data-url");
+
       for (var j = 0; j < bookmarks.length; j++) {
         if (bookmarks[j].url === url) {
           btn.classList.add("active");
@@ -132,25 +133,19 @@
       }
     }
 
-    var progressBarContainer = document.getElementById(
-      "reading-progress-container"
-    );
+    var progressBarContainer = document.getElementById("reading-progress-container");
     var progressBar = document.getElementById("reading-progress-bar");
-    var progressPercentage = document.getElementById(
-      "reading-progress-percentage"
-    );
+    var progressPercentage = document.getElementById("reading-progress-percentage");
 
     if (progressBarContainer && progressBar && progressPercentage) {
       window.addEventListener("scroll", function () {
-        var totalHeight =
-          document.body.scrollHeight - window.innerHeight;
-        var progress =
-          (window.scrollY / (totalHeight || 1)) * 100;
+        var totalHeight = document.body.scrollHeight - window.innerHeight;
+        var progress = (window.scrollY / (totalHeight || 1)) * 100;
+
         progressBar.style.width = progress + "%";
         progressPercentage.textContent = Math.round(progress) + "%";
 
-        var bubblePosition =
-          progressBar.offsetWidth - progressPercentage.offsetWidth / 2;
+        var bubblePosition = progressBar.offsetWidth - progressPercentage.offsetWidth / 2;
         progressPercentage.style.left = bubblePosition + "px";
 
         if (window.scrollY > 0) {
@@ -165,12 +160,10 @@
   document.addEventListener("click", function (e) {
     var dropdown = document.getElementById("bookmarkList");
     var button = document.querySelector(".bookmark-menu-btn");
+
     if (!dropdown || !button) return;
 
-    if (
-      !dropdown.contains(e.target) &&
-      !button.contains(e.target)
-    ) {
+    if (!dropdown.contains(e.target) && !button.contains(e.target)) {
       dropdown.classList.remove("active");
       button.classList.remove("active");
     }
@@ -180,14 +173,11 @@
     var url = window.location.href;
 
     if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard
-        .writeText(url)
-        .then(function () {
-          showCopiedIcon(element);
-        })
-        .catch(function () {
-          fallbackCopy(url, element);
-        });
+      navigator.clipboard.writeText(url).then(function () {
+        showCopiedIcon(element);
+      }).catch(function () {
+        fallbackCopy(url, element);
+      });
     } else {
       fallbackCopy(url, element);
     }
@@ -200,6 +190,7 @@
     textarea.style.position = "absolute";
     textarea.style.left = "-9999px";
     document.body.appendChild(textarea);
+
     textarea.select();
 
     try {
@@ -229,7 +220,7 @@
       element.classList.remove("show-tooltip");
       element.innerHTML =
         "<span class='tooltip'>Copied!</span>" +
-        "<svg class='feather feather-copy' fill='none' height='24' stroke='var(--jt-primary)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'>" +
+        "<svg class='feather feather-copy' fill='none' height='24' stroke='var(--jt-primary)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24'>" +
         "<rect height='13' rx='2' ry='2' width='13' x='9' y='9'/>" +
         "<path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/>" +
         "</svg>";
@@ -240,4 +231,5 @@
   window.toggleBookmarkList = toggleBookmarkList;
   window.showBookmarks = showBookmarks;
   window.removeBookmark = removeBookmark;
+
 })();
