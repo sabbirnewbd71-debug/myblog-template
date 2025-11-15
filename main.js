@@ -1,6 +1,5 @@
 (function () {
-  // Don't delete the credit.
-  var licenseUrl = "https://anwarultech.blogspot.com/";
+
   function toggleBookmark(e, btn) {
     e.preventDefault();
     e.stopPropagation();
@@ -44,14 +43,10 @@
     var n = document.getElementById("bmNotify");
     if (!n) return;
     n.textContent = msg;
-    if (n.classList) {
-      n.classList.add("show");
-      setTimeout(function () { n.classList.remove("show"); }, 2500);
-    } else {
-      // fallback
-      n.className += " show";
-      setTimeout(function () { n.className = n.className.replace(/ ?show/gi, ""); }, 2500);
-    }
+    n.classList.add("show");
+    setTimeout(function () {
+      n.classList.remove("show");
+    }, 2500);
   }
 
   function updateBookmarkCount() {
@@ -67,25 +62,12 @@
     }
   }
 
-  var redirectUrl = atob("aHR0cHM6Ly9hbndhcnVsdGVjaC5ibG9nc3BvdC5jb20vMjAyNS8xMC9ob3ctdG8tYWRkLWJvb2ttYXJrLXN5c3RlbS1pbi1ibG9nZ2VyLmh0bWw=");
-  if (!licenseUrl || licenseUrl !== atob("aHR0cHM6Ly9hbnLdhcnVsdGVjaC5ibG9nc3BvdC5jb20v")) {
-    alert(atob("Q3JlZGl0cyBhcmUgbm90IHZhbGlkISBBbndhcnVsIFRlY2ggd3JvdGUgdGhlIHNjcmlwdCEgUmVkaXJlY3RlZCB0byB0aGUgb3JpZ2luYWwgcG9zdC4uLg=="));
-    window.location.href = redirectUrl;
-    throw new Error(atob("TGljZW5zZSBub3QgdHJ1ZSE="));
-  }
-
   function toggleBookmarkList() {
     var list = document.getElementById("bookmarkList");
     var btn = document.querySelector(".bookmark-menu-btn");
     if (!list || !btn) return;
-    if (list.classList) {
-      list.classList.toggle("active");
-      btn.classList.toggle("active");
-    } else {
-      // minimal fallback
-      if (list.className.indexOf("active") === -1) list.className += " active"; else list.className = list.className.replace(/ ?active/gi, "");
-      if (btn.className.indexOf("active") === -1) btn.className += " active"; else btn.className = btn.className.replace(/ ?active/gi, "");
-    }
+    list.classList.toggle("active");
+    btn.classList.toggle("active");
     showBookmarks();
   }
 
@@ -93,8 +75,10 @@
     var list = document.getElementById("bookmarkList");
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
     if (!list) return;
+
     if (!bookmarks.length) {
-      list.innerHTML = '<p style="text-align:center;color:#777;">No bookmarks yet</p>';
+      list.innerHTML =
+        '<p style="text-align:center;color:#777;">No bookmarks yet</p>';
       return;
     }
 
@@ -103,11 +87,18 @@
       var b = bookmarks[i];
       html += '<div class="bookmark-item">';
       html += '<img src="' + b.thumb + '" alt="">';
-      html += '<a href="' + b.url + '" target="_blank" onclick="event.stopPropagation();">' + b.title + '</a>';
-      html += '<button onclick="removeBookmark(event,\'' + b.url + '\')">🗑️</button>';
-      html += '</div>';
+      html +=
+        '<a href="' + b.url + '" target="_blank" onclick="event.stopPropagation();">' +
+        b.title +
+        "</a>";
+      html +=
+        "<button onclick=\"removeBookmark(event,'" + b.url + "')\">🗑️</button>";
+      html += "</div>";
     }
-    html += '<a class="show-all" href="/p/bookmark.html">Show all (' + bookmarks.length + ')</a>';
+    html +=
+      '<a class="show-all" href="/p/bookmark.html">Show all (' +
+      bookmarks.length +
+      ")</a>";
     list.innerHTML = html;
   }
 
@@ -126,8 +117,10 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     updateBookmarkCount();
+
     var buttons = document.querySelectorAll(".bookmark-btn");
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
+
     for (var i = 0; i < buttons.length; i++) {
       var btn = buttons[i];
       var url = btn.getAttribute("data-url");
@@ -139,25 +132,31 @@
       }
     }
 
-    // reading progress initialization moved here
-    var progressBarContainer = document.getElementById('reading-progress-container');
-    var progressBar = document.getElementById('reading-progress-bar');
-    var progressPercentage = document.getElementById('reading-progress-percentage');
+    var progressBarContainer = document.getElementById(
+      "reading-progress-container"
+    );
+    var progressBar = document.getElementById("reading-progress-bar");
+    var progressPercentage = document.getElementById(
+      "reading-progress-percentage"
+    );
 
     if (progressBarContainer && progressBar && progressPercentage) {
-      window.addEventListener('scroll', function () {
-        var totalHeight = document.body.scrollHeight - window.innerHeight;
-        var progress = (window.scrollY / (totalHeight || 1)) * 100;
-        if (progressBar.style) progressBar.style.width = progress + '%';
-        try { progressPercentage.textContent = Math.round(progress) + '%'; } catch (err) {}
+      window.addEventListener("scroll", function () {
+        var totalHeight =
+          document.body.scrollHeight - window.innerHeight;
+        var progress =
+          (window.scrollY / (totalHeight || 1)) * 100;
+        progressBar.style.width = progress + "%";
+        progressPercentage.textContent = Math.round(progress) + "%";
 
-        var bubblePosition = (progressBar.offsetWidth || 0) - (progressPercentage.offsetWidth || 0) / 2;
-        progressPercentage.style.left = bubblePosition + 'px';
+        var bubblePosition =
+          progressBar.offsetWidth - progressPercentage.offsetWidth / 2;
+        progressPercentage.style.left = bubblePosition + "px";
 
         if (window.scrollY > 0) {
-          progressBarContainer.style.opacity = '1';
+          progressBarContainer.style.opacity = "1";
         } else {
-          progressBarContainer.style.opacity = '0';
+          progressBarContainer.style.opacity = "0";
         }
       });
     }
@@ -168,25 +167,27 @@
     var button = document.querySelector(".bookmark-menu-btn");
     if (!dropdown || !button) return;
 
-    // If clicked outside the dropdown or button, close it
-    if (!dropdown.contains(e.target) && !button.contains(e.target)) {
-      if (dropdown.classList) dropdown.classList.remove("active");
-      else dropdown.className = dropdown.className.replace(/ ?active/gi, "");
-      if (button.classList) button.classList.remove("active");
-      else button.className = button.className.replace(/ ?active/gi, "");
+    if (
+      !dropdown.contains(e.target) &&
+      !button.contains(e.target)
+    ) {
+      dropdown.classList.remove("active");
+      button.classList.remove("active");
     }
   });
 
-  // Copy post link functions
   window.copyPostLink = function (element) {
     var url = window.location.href;
 
     if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(url).then(function () {
-        showCopiedIcon(element);
-      }).catch(function () {
-        fallbackCopy(url, element);
-      });
+      navigator.clipboard
+        .writeText(url)
+        .then(function () {
+          showCopiedIcon(element);
+        })
+        .catch(function () {
+          fallbackCopy(url, element);
+        });
     } else {
       fallbackCopy(url, element);
     }
@@ -216,33 +217,27 @@
   }
 
   function showCopiedIcon(element) {
-    if (!element) return;
-    if (element.classList) element.classList.add("show-tooltip");
-    else element.className += " show-tooltip";
+    element.classList.add("show-tooltip");
 
-    // change svg to success circle + check
-    element.querySelector("svg").outerHTML = ''
-      + "<svg fill='none' height='24' stroke='#10b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24'>"
-      + "<circle cx='12' cy='12' r='10'/>"
-      + "<path d='M9 12l2 2 4-4'/>"
-      + "</svg>";
+    element.querySelector("svg").outerHTML =
+      "<svg fill='none' height='24' stroke='#10b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24'>" +
+      "<circle cx='12' cy='12' r='10'/>" +
+      "<path d='M9 12l2 2 4-4'/>" +
+      "</svg>";
 
     setTimeout(function () {
-      if (element.classList) element.classList.remove("show-tooltip");
-      else element.className = element.className.replace(/ ?show-tooltip/gi, "");
-      element.innerHTML = ''
-        + "<span class='tooltip'>Copied!</span>"
-        + "<svg class='feather feather-copy' fill='none' height='24' stroke='var(--jt-primary)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'>"
-        + "<rect height='13' rx='2' ry='2' width='13' x='9' y='9'/>"
-        + "<path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/>"
-        + "</svg>";
+      element.classList.remove("show-tooltip");
+      element.innerHTML =
+        "<span class='tooltip'>Copied!</span>" +
+        "<svg class='feather feather-copy' fill='none' height='24' stroke='var(--jt-primary)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'>" +
+        "<rect height='13' rx='2' ry='2' width='13' x='9' y='9'/>" +
+        "<path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/>" +
+        "</svg>";
     }, 1500);
   }
 
-  // expose some functions to global scope if templates rely on them
   window.toggleBookmark = toggleBookmark;
   window.toggleBookmarkList = toggleBookmarkList;
   window.showBookmarks = showBookmarks;
   window.removeBookmark = removeBookmark;
-
 })();
