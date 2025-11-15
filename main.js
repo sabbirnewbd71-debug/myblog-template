@@ -1,5 +1,3 @@
-<script>
-/*<![CDATA[*/
 (function () {
 
   /* -----------------------------------
@@ -305,5 +303,3 @@
   window.removeBookmark = removeBookmark;
 
 })();
-/*]]>*/
-</script>
