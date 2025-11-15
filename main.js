@@ -1,8 +1,3 @@
-
-
-
-  
-  
 <script type='text/javascript'>
 //<![CDATA[
 /* 🔖 Add or Remove Bookmark */
