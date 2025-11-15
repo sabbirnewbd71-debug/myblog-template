@@ -44,6 +44,34 @@
   };
 
 
+  
+<!-- JavaScript -->
+&lt;script&gt;
+function updateGreetingAndTime() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, &#39;0&#39;);
+  const seconds = now.getSeconds().toString().padStart(2, &#39;0&#39;);
+
+  let greeting = &quot;Good Night!&quot;;
+  if (hours &gt;= 5 &amp;&amp; hours &lt; 12) {
+    greeting = &quot;Good Morning!&quot;;
+  } else if (hours &gt;= 12 &amp;&amp; hours &lt; 17) {
+    greeting = &quot;Good Afternoon!&quot;;
+  } else if (hours &gt;= 17 &amp;&amp; hours &lt; 20) {
+    greeting = &quot;Good Evening!&quot;;
+  }
+
+  document.getElementById(&#39;greetingText&#39;).textContent = greeting;
+  document.getElementById(&#39;currentTime&#39;).textContent =
+    now.toLocaleTimeString(&#39;en-US&#39;, { hour12: true });
+}
+
+setInterval(updateGreetingAndTime, 1000); // update every second
+updateGreetingAndTime(); // run once immediately
+&lt;/script&gt;
+
+
   /* -----------------------------------
         BOOKMARK SYSTEM (ES5)
   -----------------------------------*/
