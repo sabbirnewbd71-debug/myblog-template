@@ -1,5 +1,78 @@
+<script>
+/*<![CDATA[*/
 (function () {
 
+  /* -----------------------------------
+        GREETINGS SYSTEM (ES5)
+  -----------------------------------*/
+  var greetElem = document.querySelector("#greetings");
+  var hour = new Date().getHours();
+
+  var greetMessages = [
+    "মিষ্টি স্বপ্ন দেখো!",
+    "শুভ সকাল!",
+    "শুভ বিকাল!",
+    "শুভ সন্ধ্যা!",
+    "শুভ রাত্রি!",
+    "ঘুমানোর সময় হয়েছে!"
+  ];
+
+  var greetShow = "";
+
+  if (hour < 4) greetShow = greetMessages[0];
+  else if (hour < 12) greetShow = greetMessages[1];
+  else if (hour < 17) greetShow = greetMessages[2];
+  else if (hour < 19) greetShow = greetMessages[3];
+  else if (hour < 22) greetShow = greetMessages[4];
+  else greetShow = greetMessages[5];
+
+  if (greetElem) {
+    greetElem.setAttribute("data-text", greetShow);
+  }
+
+  /* -----------------------------------
+        EN → BN NUMBER CONVERT
+  -----------------------------------*/
+  function bnNumber(en) {
+    var nums = {
+      "0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪",
+      "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"
+    };
+    return en.toString().replace(/[0-9]/g, function (d) { return nums[d]; });
+  }
+
+  /* -----------------------------------
+              CLOCK SYSTEM
+  -----------------------------------*/
+  function updateClock() {
+    var now = new Date();
+    var h = ("0" + now.getHours()).slice(-2);
+    var m = ("0" + now.getMinutes()).slice(-2);
+    var s = ("0" + now.getSeconds()).slice(-2);
+
+    var clockText = bnNumber(h) + ":" + bnNumber(m) + ":" + bnNumber(s);
+
+    var clockObj = document.getElementById("clock");
+    var announcer = document.getElementById("clock-announcer");
+
+    if (clockObj && announcer) {
+      clockObj.textContent = clockText;
+      clockObj.setAttribute("datetime", now.toISOString());
+      announcer.textContent =
+        "বর্তমান সময় " +
+        bnNumber(h) + "টা " +
+        bnNumber(m) + "মিনিট " +
+        bnNumber(s) + "সেকেন্ড";
+    }
+  }
+
+  /* Tick clock */
+  setInterval(updateClock, 1000);
+
+
+  /* -----------------------------------
+        BOOKMARK SYSTEM (ES5)
+  -----------------------------------*/
   function toggleBookmark(e, btn) {
     e.preventDefault();
     e.stopPropagation();
@@ -21,13 +94,13 @@
     }
 
     if (found) {
-      var newBookmarks = [];
+      var arr = [];
       for (var j = 0; j < bookmarks.length; j++) {
         if (bookmarks[j].url !== post.url) {
-          newBookmarks.push(bookmarks[j]);
+          arr.push(bookmarks[j]);
         }
       }
-      bookmarks = newBookmarks;
+      bookmarks = arr;
       btn.classList.remove("active");
       showNotify("❌ Removed from bookmarks");
     } else {
@@ -53,6 +126,7 @@
   function updateBookmarkCount() {
     var c = document.getElementById("bmCount");
     if (!c) return;
+
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
     var count = bookmarks.length;
 
@@ -76,7 +150,6 @@
   function showBookmarks() {
     var list = document.getElementById("bookmarkList");
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
-
     if (!list) return;
 
     if (!bookmarks.length) {
@@ -87,6 +160,7 @@
     var html = "";
     for (var i = 0; i < bookmarks.length; i++) {
       var b = bookmarks[i];
+
       html += '<div class="bookmark-item">';
       html += '<img src="' + b.thumb + '" alt="">';
       html += '<a href="' + b.url + '" target="_blank" onclick="event.stopPropagation();">' + b.title + "</a>";
@@ -100,22 +174,80 @@
 
   function removeBookmark(e, url) {
     e.stopPropagation();
+
     var bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
-    var newBookmarks = [];
+    var arr = [];
 
     for (var i = 0; i < bookmarks.length; i++) {
       if (bookmarks[i].url !== url) {
-        newBookmarks.push(bookmarks[i]);
+        arr.push(bookmarks[i]);
       }
     }
 
-    localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
+    localStorage.setItem("bookmarks", JSON.stringify(arr));
     showBookmarks();
     updateBookmarkCount();
     showNotify("❌ Removed from bookmarks");
   }
 
+  /* -----------------------------------
+        COPY POST LINK SYSTEM
+  -----------------------------------*/
+  window.copyPostLink = function (element) {
+    var url = window.location.href;
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(url)
+        .then(function () {
+          showCopiedIcon(element);
+        })
+        .catch(function () {
+          fallbackCopy(url, element);
+        });
+    } else {
+      fallbackCopy(url, element);
+    }
+  };
+
+  function fallbackCopy(text, element) {
+    var textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+
+    textarea.select();
+    document.execCommand("copy");
+
+    document.body.removeChild(textarea);
+    showCopiedIcon(element);
+  }
+
+  function showCopiedIcon(element) {
+    element.classList.add("show-tooltip");
+
+    element.querySelector("svg").outerHTML =
+      "<svg fill='none' height='24' stroke='#10b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24'>" +
+      "<circle cx='12' cy='12' r='10'></circle>" +
+      "<path d='M9 12l2 2 4-4'></path>" +
+      "</svg>";
+
+    setTimeout(function () {
+      element.classList.remove("show-tooltip");
+      element.innerHTML =
+        "<span class='tooltip'>Copied!</span>" +
+        "<svg class='feather feather-copy' fill='none' height='24' stroke='var(--jt-primary)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24'>" +
+        "<rect height='13' rx='2' ry='2' width='13' x='9' y='9'></rect>" +
+        "<path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'></path>" +
+        "</svg>";
+    }, 1500);
+  }
+
+  /* -----------------------------------
+        PAGE LOAD ACTIONS
+  -----------------------------------*/
   document.addEventListener("DOMContentLoaded", function () {
+    updateClock();
     updateBookmarkCount();
 
     var buttons = document.querySelectorAll(".bookmark-btn");
@@ -133,183 +265,45 @@
       }
     }
 
-    var progressBarContainer = document.getElementById("reading-progress-container");
-    var progressBar = document.getElementById("reading-progress-bar");
-    var progressPercentage = document.getElementById("reading-progress-percentage");
+    /* Reading progress bar */
+    var container = document.getElementById("reading-progress-container");
+    var bar = document.getElementById("reading-progress-bar");
+    var percent = document.getElementById("reading-progress-percentage");
 
-    if (progressBarContainer && progressBar && progressPercentage) {
+    if (container && bar && percent) {
       window.addEventListener("scroll", function () {
-        var totalHeight = document.body.scrollHeight - window.innerHeight;
-        var progress = (window.scrollY / (totalHeight || 1)) * 100;
+        var total = document.body.scrollHeight - window.innerHeight;
+        var prog = (window.scrollY / (total || 1)) * 100;
 
-        progressBar.style.width = progress + "%";
-        progressPercentage.textContent = Math.round(progress) + "%";
+        bar.style.width = prog + "%";
+        percent.textContent = Math.round(prog) + "%";
 
-        var bubblePosition = progressBar.offsetWidth - progressPercentage.offsetWidth / 2;
-        progressPercentage.style.left = bubblePosition + "px";
+        percent.style.left = (bar.offsetWidth - percent.offsetWidth / 2) + "px";
 
-        if (window.scrollY > 0) {
-          progressBarContainer.style.opacity = "1";
-        } else {
-          progressBarContainer.style.opacity = "0";
-        }
+        container.style.opacity = window.scrollY > 0 ? "1" : "0";
       });
     }
   });
 
+  /* Close dropdown */
   document.addEventListener("click", function (e) {
     var dropdown = document.getElementById("bookmarkList");
-    var button = document.querySelector(".bookmark-menu-btn");
+    var btn = document.querySelector(".bookmark-menu-btn");
 
-    if (!dropdown || !button) return;
+    if (!dropdown || !btn) return;
 
-    if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+    if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
       dropdown.classList.remove("active");
-      button.classList.remove("active");
+      btn.classList.remove("active");
     }
   });
 
-  window.copyPostLink = function (element) {
-    var url = window.location.href;
-
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(url).then(function () {
-        showCopiedIcon(element);
-      }).catch(function () {
-        fallbackCopy(url, element);
-      });
-    } else {
-      fallbackCopy(url, element);
-    }
-  };
-
-  function fallbackCopy(text, element) {
-    var textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.setAttribute("readonly", "");
-    textarea.style.position = "absolute";
-    textarea.style.left = "-9999px";
-    document.body.appendChild(textarea);
-
-    textarea.select();
-
-    try {
-      var successful = document.execCommand("copy");
-      if (successful) {
-        showCopiedIcon(element);
-      } else {
-        alert("Copy not supported on this device.");
-      }
-    } catch (err) {
-      alert("Copy failed: " + err);
-    }
-
-    document.body.removeChild(textarea);
-  }
-
-  function showCopiedIcon(element) {
-    element.classList.add("show-tooltip");
-
-    element.querySelector("svg").outerHTML =
-      "<svg fill='none' height='24' stroke='#10b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24'>" +
-      "<circle cx='12' cy='12' r='10'/>" +
-      "<path d='M9 12l2 2 4-4'/>" +
-      "</svg>";
-
-    setTimeout(function () {
-      element.classList.remove("show-tooltip");
-      element.innerHTML =
-        "<span class='tooltip'>Copied!</span>" +
-        "<svg class='feather feather-copy' fill='none' height='24' stroke='var(--jt-primary)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24'>" +
-        "<rect height='13' rx='2' ry='2' width='13' x='9' y='9'/>" +
-        "<path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/>" +
-        "</svg>";
-    }, 1500);
-  }
-
+  /* Global Exports */
   window.toggleBookmark = toggleBookmark;
   window.toggleBookmarkList = toggleBookmarkList;
   window.showBookmarks = showBookmarks;
   window.removeBookmark = removeBookmark;
 
 })();
-
-var অভিবাদন_এলিমেন্ট = document.querySelector("#greetings");
-var বর্তমানঘন্টা = new Date().getHours();
-
-var শুভেচ্ছা_বার্তা = [
-  "মিষ্টি স্বপ্ন দেখো!",
-  "শুভ সকাল!",
-  "শুভ বিকাল!",
-  "শুভ সন্ধ্যা!",
-  "শুভ রাত্রি!",
-  "ঘুমানোর সময় হয়েছে!"
-];
-
-var দেখানোর_বার্তা = "";
-
-if (বর্তমানঘন্টা < 4) {
-  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[0];
-} else if (বর্তমানঘন্টা < 12) {
-  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[1];
-} else if (বর্তমানঘন্টা < 17) {
-  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[2];
-} else if (বর্তমানঘন্টা < 19) {
-  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[3];
-} else if (বর্তমানঘন্টা < 22) {
-  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[4];
-} else {
-  দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[5];
-}
-
-অভিবাদন_এলিমেন্ট.setAttribute("data-text", দেখানোর_বার্তা);
-
-
-// ইংরেজি → বাংলা সংখ্যা রূপান্তর ফাংশন
-function bnNumber(en) {
-  var nums = {
-    "0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪",
-    "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"
-  };
-
-  return en.toString().replace(/[0-9]/g, function (d) {
-    return nums[d];
-  });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-
-  function ঘড়ি_আপডেট() {
-    var এখন = new Date();
-
-    var ঘন্টা = String(এখন.getHours());
-    if (ঘন্টা.length < 2) ঘন্টা = "0" + ঘন্টা;
-
-    var মিনিট = String(এখন.getMinutes());
-    if (মিনিট.length < 2) মিনিট = "0" + মিনিট;
-
-    var সেকেন্ড = String(এখন.getSeconds());
-    if (সেকেন্ড.length < 2) সেকেন্ড = "0" + সেকেন্ড;
-
-    var সময়_স্ট্রিং = bnNumber(ঘন্টা) + ":" + bnNumber(মিনিট) + ":" + bnNumber(সেকেন্ড);
-
-    var ঘড়ি = document.getElementById("clock");
-    var সময়_ঘোষক = document.getElementById("clock-announcer");
-
-    if (ঘড়ি && সময়_ঘোষক) {
-      ঘড়ি.textContent = সময়_স্ট্রিং;
-      ঘড়ি.setAttribute("datetime", এখন.toISOString());
-      সময়_ঘোষক.textContent =
-        "বর্তমান সময় " +
-        bnNumber(ঘন্টা) +
-        "টা " +
-        bnNumber(মিনিট) +
-        "মিনিট " +
-        bnNumber(সেকেন্ড) +
-        "সেকেন্ড";
-    }
-  }
-
-  ঘড়ি_আপডেট();
-  setInterval(ঘড়ি_আপডেট, 1000);
-});
+/*]]>*/
+</script>
