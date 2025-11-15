@@ -1,6 +1,6 @@
 (function () {
   // Don't delete the credit.
-  var licenseUrl = "https://anwarultech.blogspot.com/";
+  var licenseUrl = "https://anwarulteJch.blogspot.com/";
   function toggleBookmark(e, btn) {
     e.preventDefault();
     e.stopPropagation();
