@@ -1,85 +1,10 @@
-function copyPostLink(element) {
-  const url = window.location.href;
 
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(url).then(function () {
-      showCopiedIcon(element);
-    }).catch(function () {
-      fallbackCopy(url, element);
-    });
-  } else {
-    fallbackCopy(url, element);
-  }
-}
 
-function fallbackCopy(text, element) {
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.setAttribute("readonly", "");
-  textarea.style.position = "absolute";
-  textarea.style.left = "-9999px";
-  document.body.appendChild(textarea);
-  textarea.select();
 
-  try {
-    const successful = document.execCommand("copy");
-    if (successful) {
-      showCopiedIcon(element);
-    } else {
-      alert("Copy not supported on this device.");
-    }
-  } catch (err) {
-    alert("Copy failed: " + err);
-  }
-
-  document.body.removeChild(textarea);
-}
-
-function showCopiedIcon(element) {
-  element.classList.add("show-tooltip");
-
-  element.querySelector("svg").outerHTML = `
-    <svg fill='none' height='24' stroke='#10b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24'>
-      <circle cx='12' cy='12' r='10'/>
-      <path d='M9 12l2 2 4-4'/>
-    </svg>
-  `;
-
-  setTimeout(function () {
-    element.classList.remove("show-tooltip");
-    element.innerHTML = `
-      <span class='tooltip'>Copied!</span>
-      <svg class='feather feather-copy' fill='none' height='24' stroke='var(--jt-primary)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'>
-        <rect height='13' rx='2' ry='2' width='13' x='9' y='9'/>
-        <path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/>
-      </svg>
-    `;
-  }, 1500);
-}
-     document.addEventListener(&#39;DOMContentLoaded&#39;, function() {
-            const progressBarContainer = document.getElementById(&#39;reading-progress-container&#39;);
-            const progressBar = document.getElementById(&#39;reading-progress-bar&#39;);
-            const progressPercentage = document.getElementById(&#39;reading-progress-percentage&#39;);
-
-            window.addEventListener(&#39;scroll&#39;, function() {
-                const totalHeight = document.body.scrollHeight - window.innerHeight;
-                const progress = (window.scrollY / totalHeight) * 100;
-                progressBar.style.width = progress + &#39;%&#39;;
-                progressPercentage.textContent = Math.round(progress) + &#39;%&#39;;
-
-                // Position the percentage bubble correctly within the progress bar
-                const bubblePosition = progressBar.offsetWidth - progressPercentage.offsetWidth / 2;
-                progressPercentage.style.left = bubblePosition + &#39;px&#39;;
-
-                // Make the progress bar visible when scrolling starts
-                if (window.scrollY &gt; 0) {
-                    progressBarContainer.style.opacity = &#39;1&#39;;
-                } else {
-                    progressBarContainer.style.opacity = &#39;0&#39;;
-                }
-            });
-        });
-
+  
+  
+<script type='text/javascript'>
+//<![CDATA[
 /* 🔖 Add or Remove Bookmark */
 // Don't delete the credit.
 const licenseUrl = "https://anwarultech.blogspot.com/";
@@ -183,60 +108,93 @@ document.addEventListener("click", function(e) {
     button.classList.remove("active");
   }
 });
-var অভিবাদন_এলিমেন্ট = document.querySelector("#greetings");
-var বর্তমানঘন্টা = new Date().getHours();
+//]]>
+</script>
+  <script>
+        document.addEventListener(&#39;DOMContentLoaded&#39;, function() {
+            const progressBarContainer = document.getElementById(&#39;reading-progress-container&#39;);
+            const progressBar = document.getElementById(&#39;reading-progress-bar&#39;);
+            const progressPercentage = document.getElementById(&#39;reading-progress-percentage&#39;);
 
-var শুভেচ্ছা_বার্তা = [
-  "মিষ্টি স্বপ্ন দেখো!",
-  "শুভ সকাল!",
-  "শুভ বিকাল!",
-  "শুভ সন্ধ্যা!",
-  "শুভ রাত্রি!",
-  "ঘুমানোর সময় হয়েছে!"
-];
+            window.addEventListener(&#39;scroll&#39;, function() {
+                const totalHeight = document.body.scrollHeight - window.innerHeight;
+                const progress = (window.scrollY / totalHeight) * 100;
+                progressBar.style.width = progress + &#39;%&#39;;
+                progressPercentage.textContent = Math.round(progress) + &#39;%&#39;;
 
-let দেখানোর_বার্তা = "";
+                // Position the percentage bubble correctly within the progress bar
+                const bubblePosition = progressBar.offsetWidth - progressPercentage.offsetWidth / 2;
+                progressPercentage.style.left = bubblePosition + &#39;px&#39;;
 
-if (বর্তমানঘন্টা < 4) দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[0];
-else if (বর্তমানঘন্টা < 12) দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[1];
-else if (বর্তমানঘন্টা < 17) দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[2];
-else if (বর্তমানঘন্টা < 19) দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[3];
-else if (বর্তমানঘন্টা < 22) দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[4];
-else দেখানোর_বার্তা = শুভেচ্ছা_বার্তা[5];
+                // Make the progress bar visible when scrolling starts
+                if (window.scrollY &gt; 0) {
+                    progressBarContainer.style.opacity = &#39;1&#39;;
+                } else {
+                    progressBarContainer.style.opacity = &#39;0&#39;;
+                }
+            });
+        });
+    </script>
 
-অভিবাদন_এলিমেন্ট.setAttribute('data-text', দেখানোর_বার্তা);
+<script type='text/javascript'>
+//<![CDATA[
+function copyPostLink(element) {
+  const url = window.location.href;
 
-// ইংরেজি → বাংলা সংখ্যা রূপান্তর ফাংশন
-function bnNumber(en) {
-  const nums = {
-    "0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪",
-    "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"
-  };
-  return en.toString().replace(/[0-9]/g, d => nums[d]);
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url).then(function () {
+      showCopiedIcon(element);
+    }).catch(function () {
+      fallbackCopy(url, element);
+    });
+  } else {
+    fallbackCopy(url, element);
+  }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+function fallbackCopy(text, element) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "absolute";
+  textarea.style.left = "-9999px";
+  document.body.appendChild(textarea);
+  textarea.select();
 
-  function ঘড়ি_আপডেট() {
-    const এখন = new Date();
-    const ঘন্টা = String(এখন.getHours()).padStart(2, '0');
-    const মিনিট = String(এখন.getMinutes()).padStart(2, '0');
-    const সেকেন্ড = String(এখন.getSeconds()).padStart(2, '0');
-
-    // বাংলা সংখ্যায় রূপান্তর
-    const সময়_স্ট্রিং = `${bnNumber(ঘন্টা)}:${bnNumber(মিনিট)}:${bnNumber(সেকেন্ড)}`;
-
-    const ঘড়ি = document.getElementById('clock');
-    const সময়_ঘোষক = document.getElementById('clock-announcer');
-
-    if (ঘড়ি && সময়_ঘোষক) {
-      ঘড়ি.textContent = সময়_স্ট্রিং;
-      ঘড়ি.setAttribute('datetime', এখন.toISOString());
-      সময়_ঘোষক.textContent = `বর্তমান সময় ${bnNumber(ঘন্টা)}টা ${bnNumber(মিনিট)}মিনিট ${bnNumber(সেকেন্ড)}সেকেন্ড`;
+  try {
+    const successful = document.execCommand("copy");
+    if (successful) {
+      showCopiedIcon(element);
+    } else {
+      alert("Copy not supported on this device.");
     }
+  } catch (err) {
+    alert("Copy failed: " + err);
   }
 
-  ঘড়ি_আপডেট();
-  setInterval(ঘড়ি_আপডেট, 1000);
-});
+  document.body.removeChild(textarea);
+}
 
+function showCopiedIcon(element) {
+  element.classList.add("show-tooltip");
+
+  element.querySelector("svg").outerHTML = `
+    <svg fill='none' height='24' stroke='#10b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24'>
+      <circle cx='12' cy='12' r='10'/>
+      <path d='M9 12l2 2 4-4'/>
+    </svg>
+  `;
+
+  setTimeout(function () {
+    element.classList.remove("show-tooltip");
+    element.innerHTML = `
+      <span class='tooltip'>Copied!</span>
+      <svg class='feather feather-copy' fill='none' height='24' stroke='var(--jt-primary)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'>
+        <rect height='13' rx='2' ry='2' width='13' x='9' y='9'/>
+        <path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/>
+      </svg>
+    `;
+  }, 1500);
+}
+//]]>
+</script>
