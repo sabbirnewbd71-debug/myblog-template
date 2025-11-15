@@ -46,6 +46,68 @@
   /* -----------------------------------
         GREETINGS SYSTEM (ES5)
   -----------------------------------*/
+  var greetElem = document.querySelector("#greetings");
+  var hour = new Date().getHours();
+
+  var greetMessages = [
+    "মিষ্টি স্বপ্ন দেখো!",
+    "শুভ সকাল!",
+    "শুভ বিকাল!",
+    "শুভ সন্ধ্যা!",
+    "শুভ রাত্রি!",
+    "ঘুমানোর সময় হয়েছে!"
+  ];
+
+  var greetShow = "";
+
+  if (hour < 4) greetShow = greetMessages[0];
+  else if (hour < 12) greetShow = greetMessages[1];
+  else if (hour < 17) greetShow = greetMessages[2];
+  else if (hour < 19) greetShow = greetMessages[3];
+  else if (hour < 22) greetShow = greetMessages[4];
+  else greetShow = greetMessages[5];
+
+  if (greetElem) {
+    greetElem.setAttribute("data-text", greetShow);
+  }
+
+  /* -----------------------------------
+        EN → BN NUMBER CONVERT
+  -----------------------------------*/
+  function bnNumber(en) {
+    var nums = {
+      "0": "০", "1": "১", "2": "২", "৩": "৩", "4": "৪",
+      "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"
+    };
+    return en.toString().replace(/[0-9]/g, function (d) { return nums[d]; });
+  }
+
+  /* -----------------------------------
+        CLOCK SYSTEM
+  -----------------------------------*/
+  function updateClock() {
+    var now = new Date();
+    var h = ("0" + now.getHours()).slice(-2);
+    var m = ("0" + now.getMinutes()).slice(-2);
+    var s = ("0" + now.getSeconds()).slice(-2);
+
+    var clockText = bnNumber(h) + ":" + bnNumber(m) + ":" + bnNumber(s);
+
+    var clockObj = document.getElementById("clock");
+    var announcer = document.getElementById("clock-announcer");
+
+    if (clockObj && announcer) {
+      clockObj.textContent = clockText;
+      clockObj.setAttribute("datetime", now.toISOString());
+      announcer.textContent =
+        "বর্তমান সময় " +
+        bnNumber(h) + "টা " +
+        bnNumber(m) + "মিনিট " +
+        bnNumber(s) + "সেকেন্ড";
+    }
+  }
+
+  setInterval(updateClock, 1000);
 
   /* -----------------------------------
         BOOKMARK SYSTEM (ES5)
