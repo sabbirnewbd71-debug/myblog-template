@@ -1,13 +1,21 @@
 (function () {
 
   /* -----------------------------------
-        DOMAIN CHECK (ES5 MODE)
+        DOMAIN CHECK + BACK BLOCK (ES5)
   -----------------------------------*/
-  var allowedDomains = ["yourdomain.com", "www.yourdomain.com"]; // ← নিজের ডোমেইন দিন
+  var allowedDomains = ["sabbir.com", "www.sabbir.com"];
   var currentDomain = window.location.hostname;
 
   if (allowedDomains.indexOf(currentDomain) === -1) {
-    window.location.href = "https://google.com";
+
+    /* BACK BUTTON BLOCK */
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      history.pushState(null, null, location.href);
+    };
+
+    /* REDIRECT */
+    window.location.replace("https://sabbir.com");
   }
 
   /* -----------------------------------
@@ -34,7 +42,6 @@
       return false;
     }
   };
-
 
   /* -----------------------------------
         GREETINGS SYSTEM (ES5)
@@ -69,14 +76,14 @@
   -----------------------------------*/
   function bnNumber(en) {
     var nums = {
-      "0": "০", "1": "১", "2": "২", "3": "৩", "৪": "৪",
+      "0": "০", "1": "১", "2": "২", "৩": "৩", "4": "৪",
       "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"
     };
     return en.toString().replace(/[0-9]/g, function (d) { return nums[d]; });
   }
 
   /* -----------------------------------
-              CLOCK SYSTEM
+        CLOCK SYSTEM
   -----------------------------------*/
   function updateClock() {
     var now = new Date();
@@ -101,7 +108,6 @@
   }
 
   setInterval(updateClock, 1000);
-
 
   /* -----------------------------------
         BOOKMARK SYSTEM (ES5)
