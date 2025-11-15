@@ -3,7 +3,7 @@
   /* -----------------------------------
         DOMAIN CHECK + BACK BLOCK (ES5)
   -----------------------------------*/
-  var allowedDomains = ["utblackles4.com", "www.utblackles4.com"];
+  var allowedDomains = ["utblackles4.com", "utblackles4.blogspot.com"];
   var currentDomain = window.location.hostname;
 
   if (allowedDomains.indexOf(currentDomain) === -1) {
@@ -15,7 +15,7 @@
     };
 
     /* REDIRECT */
-    window.location.replace("https://sabbir.com");
+    window.location.replace("utblackles4.com");
   }
 
   /* -----------------------------------
